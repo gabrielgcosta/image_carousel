@@ -30,5 +30,10 @@ public class Carousel {
     @OneToMany
     @JoinColumn(name = "image_id")
     private List<Image> images;
+
+    public Carousel(String title, List<Image> images){
+        this.title = title;
+        this.images = images;
+    }
     
 }

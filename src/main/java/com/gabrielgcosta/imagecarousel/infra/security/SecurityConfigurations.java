@@ -29,9 +29,9 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.POST, "auth/register").permitAll()
                     .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
-                    .requestMatchers(HttpMethod.POST, "image").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.DELETE, "image").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET, "image").permitAll()
+                    .requestMatchers(HttpMethod.POST, "carousel").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "carousel/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "carousel").permitAll()
                     .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

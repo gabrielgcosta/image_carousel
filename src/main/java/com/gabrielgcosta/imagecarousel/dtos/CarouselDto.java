@@ -1,5 +1,6 @@
 package com.gabrielgcosta.imagecarousel.dtos;
 
-public record CarouselDto(String title, ImageDto image) {
+import java.util.List;
+public record CarouselDto(String title, List<ImageDto> images) {
     
 }

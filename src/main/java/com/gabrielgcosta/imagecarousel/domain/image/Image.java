@@ -22,5 +22,10 @@ public class Image {
 
     private String path;
     private String description;
+
+    public Image(String path, String description){
+        this.description = description;
+        this.path = path;
+    }
     
 }
