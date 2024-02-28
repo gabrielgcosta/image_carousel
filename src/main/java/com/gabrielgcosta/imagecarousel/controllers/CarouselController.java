@@ -28,10 +28,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class CarouselController {
 
     @Autowired
-    CarouselService carouselService;
+    private CarouselService carouselService;
 
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
 
     @PostMapping()
     public ResponseEntity<Carousel> createCarousel(@RequestBody CarouselDto data) {

@@ -16,10 +16,10 @@ import com.gabrielgcosta.imagecarousel.repositories.CarouselRepository;
 public class CarouselService {
 
     @Autowired
-    CarouselRepository carouselRepository;
+    private CarouselRepository carouselRepository;
 
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
 
     public Carousel createCarousel(CarouselDto data){
         List<Image> imagesList = new ArrayList<>();

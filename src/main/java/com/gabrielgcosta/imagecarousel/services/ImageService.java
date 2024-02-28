@@ -13,7 +13,7 @@ import com.gabrielgcosta.imagecarousel.repositories.ImageRepository;
 public class ImageService {
 
     @Autowired
-    ImageRepository imageRepository;
+    private ImageRepository imageRepository;
 
     public Image saveImage(ImageDto image){
         Image newImage = new Image(image.path(), image.description());
@@ -27,6 +27,18 @@ public class ImageService {
 
     public void deleteImage(Image image){
         this.imageRepository.delete(image);
+    }
+
+    public void deleteImageById(UUID id) throws Exception{
+        Image image = this.findById(id);
+        this.imageRepository.delete(image);
+    }
+
+    public Image updateImage(UUID id, String description) throws Exception{
+        Image image = this.findById(id);
+        image.setDescription(description);
+        this.imageRepository.save(image);
+        return image;
     }
     
 }
