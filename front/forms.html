@@ -44,7 +44,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-        const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtb3ZpZS1yYW5rZXItYXBpIiwic3ViIjoiZ2FicmllbGdjb3N0YSIsImV4cCI6MTcwOTIzMzQxNH0.2KNKhGIS3tJehvUNB62FWgSKyhToh92V__RpbhL97Dw';
+        const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtb3ZpZS1yYW5rZXItYXBpIiwic3ViIjoiZ2FicmllbGdjb3N0YSIsImV4cCI6MTcwOTI0ODcxM30.Ezae7-MHk5C1_u_O2WLBxYUXhwtZZ9_zZ9IOF9QZNlI';
 
         let imageFieldIndex = 0;
 
@@ -69,20 +69,21 @@
 
         async function sendFormData() {
             const form = document.getElementById('carouselForm');
-            const images = document.getElementById('imageFields');
             const formData = new FormData(form);
             var arrayImages = [];
 
             const numberOfFields = imageFields.querySelectorAll('.mb-3').length;
 
             for (i = 0; i < numberOfFields; i++) {
-                let image = formData.get(`image${i}`);
-                let description = formData.get(`description${i}`);
+                var image = formData.get(`image${i}`);
+                var description = formData.get(`description${i}`);
+                var imgObj = {
+                    "image": image
+                };
                 try {
-                    let response = await axios.post('http://localhost:8080/image/upload-image', {"image": image}, {
+                    var response = await axios.post('http://localhost:8080/image/upload-image', imgObj, {
                         headers: {
-                            'Content-Type': 'multipart/form-data',
-                            'Authorization': `Bearer ${jwtToken}`
+                            'Content-Type': 'multipart/form-data'
                         },
                     });
                     var imageJson = {
@@ -113,7 +114,6 @@
             } catch (error) {
                 console.error('Error submiting form:', error);
             }
-            debugger;
         }
     </script>
 

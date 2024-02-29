@@ -26,7 +26,6 @@ import com.gabrielgcosta.imagecarousel.domain.image.ImagePath;
 import com.gabrielgcosta.imagecarousel.dtos.UpdateImageDto;
 import com.gabrielgcosta.imagecarousel.services.ImageService;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("image")
@@ -39,7 +38,7 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping("/upload-image")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image, HttpServletRequest request) throws IllegalStateException, IOException{
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image) throws IllegalStateException, IOException{
         if (!image.getContentType().startsWith("image/")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The file is not an image");
         }

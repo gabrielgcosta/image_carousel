@@ -34,6 +34,7 @@ public class SecurityConfigurations {
                     .requestMatchers(HttpMethod.GET, "carousel").permitAll()
                     .requestMatchers(HttpMethod.POST, "carousel/alter-order").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "image").permitAll()
+                    .requestMatchers(HttpMethod.POST, "image/upload-image").permitAll()
                     .requestMatchers(HttpMethod.GET, "image/{id}").permitAll()
                     .requestMatchers(HttpMethod.DELETE, "image/{id}").hasRole("ADMIN")
                     .anyRequest().authenticated())
