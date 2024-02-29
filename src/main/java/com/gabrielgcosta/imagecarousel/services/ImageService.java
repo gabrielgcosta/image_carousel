@@ -1,5 +1,6 @@
 package com.gabrielgcosta.imagecarousel.services;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,10 @@ public class ImageService {
         image.setDescription(description);
         this.imageRepository.save(image);
         return image;
+    }
+
+    public List<Image> findAll(){
+        return this.imageRepository.findAll();
     }
     
 }

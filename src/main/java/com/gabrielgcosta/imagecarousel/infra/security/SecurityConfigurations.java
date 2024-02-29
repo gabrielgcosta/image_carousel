@@ -30,8 +30,11 @@ public class SecurityConfigurations {
                     .requestMatchers(HttpMethod.POST, "auth/register").permitAll()
                     .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "carousel").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.DELETE, "carousel/{id}").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "carousel/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "carousel").permitAll()
+                    .requestMatchers(HttpMethod.GET, "image").permitAll()
+                    .requestMatchers(HttpMethod.GET, "image/{id}").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "image/{id}").hasRole("ADMIN")
                     .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,6 +68,18 @@ public class ImageController {
     public ResponseEntity<Image> updateImage(@PathVariable UUID id, @RequestBody UpdateImageDto data) throws Exception{
         Image image = this.imageService.updateImage(id, data.description());
         return new ResponseEntity<>(image, HttpStatus.OK);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Image>> getImages(){
+        List<Image> images = this.imageService.findAll();
+        return ResponseEntity.ok().body(images);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Image> getImages(@PathVariable UUID id) throws Exception{
+        Image image = this.imageService.findById(id);
+        return ResponseEntity.ok().body(image);
     }
     
 }
