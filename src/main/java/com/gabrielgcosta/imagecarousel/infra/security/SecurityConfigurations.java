@@ -32,6 +32,7 @@ public class SecurityConfigurations {
                     .requestMatchers(HttpMethod.POST, "carousel").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "carousel/{id}").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "carousel").permitAll()
+                    .requestMatchers(HttpMethod.POST, "carousel/alter-order").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.GET, "image").permitAll()
                     .requestMatchers(HttpMethod.GET, "image/{id}").permitAll()
                     .requestMatchers(HttpMethod.DELETE, "image/{id}").hasRole("ADMIN")

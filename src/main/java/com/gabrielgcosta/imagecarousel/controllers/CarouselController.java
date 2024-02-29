@@ -5,10 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gabrielgcosta.imagecarousel.domain.carousel.Carousel;
 import com.gabrielgcosta.imagecarousel.domain.image.Image;
+import com.gabrielgcosta.imagecarousel.dtos.AlterOrderDto;
 import com.gabrielgcosta.imagecarousel.dtos.CarouselDto;
 import com.gabrielgcosta.imagecarousel.dtos.ImageDto;
 import com.gabrielgcosta.imagecarousel.services.CarouselService;
 import com.gabrielgcosta.imagecarousel.services.ImageService;
+
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -66,6 +69,33 @@ public class CarouselController {
         carousel.getImages().add(newImage);
         this.carouselService.saveCarousel(carousel);
         return new ResponseEntity<>(carousel, HttpStatus.CREATED);
+    }
+
+    @Transactional
+    @PostMapping("/alter-order")
+    public ResponseEntity<?> alterOrder(@RequestBody AlterOrderDto data) throws Exception{
+
+        Carousel carousel = this.carouselService.findById(data.carouselId());
+        Integer indexImage1 = null;
+        Integer indexImage2 = null;
+        Image auxImage = new Image();
+        for(int i = 0; i < carousel.getImages().size(); i++){
+
+            if(carousel.getImages().get(i).getId().equals(data.idImage1())){
+                indexImage1 = i;
+            }else if(carousel.getImages().get(i).getId().equals(data.idImage2())){
+                indexImage2 = i;
+            }
+        }
+        if(indexImage1 != null && indexImage2 != null){
+            auxImage = carousel.getImages().get(indexImage1);
+            carousel.getImages().set(indexImage1, carousel.getImages().get(indexImage2));
+            carousel.getImages().set(indexImage2, auxImage);
+            this.carouselService.saveCarousel(carousel);
+            return ResponseEntity.ok().body(carousel);
+        }
+        return ResponseEntity.badRequest().body("Image was not found");
+
     }
     
     
