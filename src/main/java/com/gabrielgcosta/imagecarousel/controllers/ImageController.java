@@ -2,6 +2,8 @@ package com.gabrielgcosta.imagecarousel.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ import com.gabrielgcosta.imagecarousel.domain.image.ImagePath;
 import com.gabrielgcosta.imagecarousel.dtos.UpdateImageDto;
 import com.gabrielgcosta.imagecarousel.services.ImageService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("image")
 public class ImageController {
@@ -33,20 +37,20 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping("/upload-image")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image) throws IllegalStateException, IOException{
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image, HttpServletRequest request) throws IllegalStateException, IOException{
         if (!image.getContentType().startsWith("image/")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The file is not an image");
         }
 
         try {
+            Path projectPath = Paths.get("").toAbsolutePath();
             ImagePath imagePath = new ImagePath(imageRootPath + image.getOriginalFilename());
-            System.out.println(imagePath.getPath());
-            image.transferTo(new File(imagePath.getPath()));
+            image.transferTo(new File(projectPath + imagePath.getPath()));
         
             return ResponseEntity.ok().body(imagePath);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Error uploading image");
+            .body(e.getMessage());
         }
         
     }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add carousel</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha384-GLhlTQ8iKu1iTRzA6I64LrKENQp6q5rN7EJF9+g6QF7WsGcR5ZgA2p1YUuRTSYbA" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1>Add carousel</h1>
+
+        <form id="carouselForm">
+            <!-- Carousel title -->
+            <div class="mb-3">
+                <label for="title" class="form-label">Carousel title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+
+            <!-- Images fields -->
+            <div id="imageFields">
+                <div class="mb-3" id="imageField0">
+                    <label for="image" class="form-label">Upload image</label>
+                    <input type="file" class="form-control" id="image" name="image0" accept="image/*" required>
+                    <label for="description" class="form-label mt-2">Description</label>
+                    <input type="text" class="form-control" id="description" name="description0" required>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary mt-2" onclick="addImageField()">Add image</button>
+            <button type="button" class="btn btn-primary mt-2" onclick="sendFormData()">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtb3ZpZS1yYW5rZXItYXBpIiwic3ViIjoiZ2FicmllbGdjb3N0YSIsImV4cCI6MTcwOTIzMzQxNH0.2KNKhGIS3tJehvUNB62FWgSKyhToh92V__RpbhL97Dw';
+
+        let imageFieldIndex = 0;
+
+        function addImageField() {
+            imageFieldIndex++;
+
+            const imageFields = document.getElementById('imageFields');
+
+            const newImageField = document.createElement('div');
+            newImageField.classList.add('mb-3');
+            newImageField.id = `imageField${imageFieldIndex}`;
+
+            newImageField.innerHTML = `
+            <label for="image" class="form-label">Upload de Imagem</label>
+            <input type="file" class="form-control" id="image" name="image${imageFieldIndex}" accept="image/*" required>
+            <label for="description" class="form-label mt-2">Legenda</label>
+            <input type="text" class="form-control" id="description" name="description${imageFieldIndex}" required>
+        `;
+
+            imageFields.appendChild(newImageField);
+        }
+
+        async function sendFormData() {
+            const form = document.getElementById('carouselForm');
+            const images = document.getElementById('imageFields');
+            const formData = new FormData(form);
+            var arrayImages = [];
+
+            const numberOfFields = imageFields.querySelectorAll('.mb-3').length;
+
+            for (i = 0; i < numberOfFields; i++) {
+                let image = formData.get(`image${i}`);
+                let description = formData.get(`description${i}`);
+                try {
+                    let response = await axios.post('http://localhost:8080/image/upload-image', {"image": image}, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${jwtToken}`
+                        },
+                    });
+                    var imageJson = {
+                        "path": response.data.path,
+                        "description": description
+                    };
+                    arrayImages.push(imageJson);
+
+                } catch (error) {
+                    console.error('Error uploading image', error);
+                }
+
+            }
+            const carouselJson = {
+                "title": formData.get("title"),
+                "images": arrayImages
+            };
+
+            try {
+                const response = await axios.post('http://localhost:8080/carousel', carouselJson, {
+                    headers: {
+                        'Authorization': `Bearer ${jwtToken}`
+                    },
+                });
+
+                console.log('API response:', response.data);
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error submiting form:', error);
+            }
+            debugger;
+        }
+    </script>
+
+</body>
+
+</html>
